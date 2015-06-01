@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# using host cert for both FE and pilot
+voms-proxy-init -cert /etc/grid-security/hostcert.pem -key /etc/grid-security/hostkey.pem -out /tmp/proxy.new -hours 72 -voms osg:/osg/ligo && \
+chown frontend:frontend /tmp/proxy.new && \
+mv /tmp/proxy.new /tmp/vo_proxy

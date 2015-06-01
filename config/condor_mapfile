@@ -1,0 +1,4 @@
+GSI "^\/DC\=com\/DC\=DigiCert\-Grid\/O\=Open\ Science\ Grid\/OU\=Services\/CN\=cabinet\-10\-10\-5\.t2\.ucsd\.edu$" test_schedd
+GSI "^\/DC\=com\/DC\=DigiCert\-Grid\/O\=Open\ Science\ Grid\/OU\=Services\/CN\=osg\-ligo\-1\.t2\.ucsd\.edu$" pilot
+GSI (.*) anonymous
+FS (.*) \1
