@@ -17,8 +17,6 @@
             <match_attr name="GLIDEIN_Site" type="string"/>
          </match_attrs>
          <collectors>
-            <collector DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=gfactory-1.t2.ucsd.edu" comment="Define factory collector globally for simplicity" factory_identity="gfactory@gfactory-1.t2.ucsd.edu" my_identity="feligo@gfactory-1.t2.ucsd.edu" node="gfactory-1.t2.ucsd.edu"/>
-            <collector DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=glidein.grid.iu.edu" comment="Define factory collector globally for simplicity" factory_identity="gfactory@glidein.grid.iu.edu" my_identity="feligo@glidein.grid.iu.edu" node="glidein.grid.iu.edu"/>
          </collectors>
       </factory>
       <job comment="Define job constraint and schedds globally for simplicity" query_expr="(JobUniverse==5)&amp;&amp;(GLIDEIN_Is_Monitor =!= TRUE)&amp;&amp;(JOB_Is_Monitor =!= TRUE)&amp;&amp;(DESIRED_Sites=!=undefined)">
@@ -56,14 +54,49 @@
             <running_glideins_per_entry max="10000" relative_to_queue="1.15"/>
             <running_glideins_total curb="90000" max="100000"/>
          </config>
-         <match match_expr="True" start_expr="True">
+         <match match_expr="True" start_expr="(is_itb=?=undefined)||(!is_itb)">
             <factory query_expr="True">
                <match_attrs>
                </match_attrs>
                <collectors>
+                  <collector DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=gfactory-1.t2.ucsd.edu" factory_identity="gfactory@gfactory-1.t2.ucsd.edu" my_identity="feligo@gfactory-1.t2.ucsd.edu" node="gfactory-1.t2.ucsd.edu"/>
+                  <collector DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=glidein.grid.iu.edu" factory_identity="gfactory@glidein.grid.iu.edu" my_identity="feligo@glidein.grid.iu.edu" node="glidein.grid.iu.edu"/>
                </collectors>
             </factory>
-            <job query_expr="True">
+            <job query_expr="(is_itb=?=undefined)||(!is_itb)">
+               <match_attrs>
+               </match_attrs>
+               <schedds>
+               </schedds>
+            </job>
+         </match>
+         <security>
+            <credentials>
+            </credentials>
+         </security>
+         <attrs>
+         </attrs>
+         <files>
+         </files>
+      </group>
+      <group name="itb" enabled="True">
+         <config>
+            <idle_glideins_per_entry max="100" reserve="5"/>
+            <idle_vms_per_entry curb="5" max="100"/>
+            <idle_vms_total curb="200" max="1000"/>
+            <processing_workers matchmakers="3"/>
+            <running_glideins_per_entry max="10000" relative_to_queue="1.15"/>
+            <running_glideins_total curb="90000" max="100000"/>
+         </config>
+         <match match_expr="True" start_expr="(is_itb)">
+            <factory query_expr="True">
+               <match_attrs>
+               </match_attrs>
+               <collectors>
+                  <collector DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=glidein-itb.grid.iu.edu" factory_identity="gfactory@glidein-itb.grid.iu.edu" my_identity="feligo@glidein-itb.grid.iu.edu" node="glidein-itb.grid.iu.edu"/>
+               </collectors>
+            </factory>
+            <job query_expr="(is_itb)">
                <match_attrs>
                </match_attrs>
                <schedds>
