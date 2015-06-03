@@ -1,5 +1,5 @@
 GSI "^\/DC\=com\/DC\=DigiCert\-Grid\/O\=Open\ Science\ Grid\/OU\=Services\/CN\=cabinet\-10\-10\-5\.t2\.ucsd\.edu$" test_schedd
 GSI "^\/DC\=com\/DC\=DigiCert\-Grid\/O\=Open\ Science\ Grid\/OU\=Services\/CN\=osg\-ligo\-1\.t2\.ucsd\.edu$" pilot
-GSI "^\/DC\=com\/DC\=DigiCert\-Grid\/O\=Open\ Science\ Grid\/OU\=Services\/CN\=ligo\-6\.pace\.gatech\.edu$" gatech_schedd
+GSI "^\/DC\=com\/DC\=DigiCert\-Grid\/O\=Open\ Science\ Grid\/OU\=Services\/CN\=ligo\-condorsch\.pace\.gatech\.edu$" gatech_schedd
 GSI (.*) anonymous
 FS (.*) \1

@@ -11,7 +11,7 @@
          <process_log backup_count="5" compression="" extension="err" max_days="7.0" max_mbytes="100.0" min_days="3.0" msg_types="DEBUG,ERR,WARN,EXCEPTION"/>
       </process_logs>
    </log_retention>
-   <match match_expr='glidein["attrs"]["GLIDEIN_Site"] in job["DESIRED_Sites"].split(",")' start_expr='stringListMember(GLIDEIN_Site,DESIRED_Sites,",")'>
+   <match match_expr='(not job.has_key("DESIRED_Sites")) or (glidein["attrs"]["GLIDEIN_Site"] in job["DESIRED_Sites"].split(","))' start_expr='(DESIRED_Sites=?=undefined)) || (stringListMember(GLIDEIN_Site,DESIRED_Sites,",")'>
       <factory query_expr='((stringListMember("LIGO", GLIDEIN_Supported_VOs)))'>
          <match_attrs>
             <match_attr name="GLIDEIN_Site" type="string"/>
@@ -19,13 +19,13 @@
          <collectors>
          </collectors>
       </factory>
-      <job comment="Define job constraint and schedds globally for simplicity" query_expr="(JobUniverse==5)&amp;&amp;(GLIDEIN_Is_Monitor =!= TRUE)&amp;&amp;(JOB_Is_Monitor =!= TRUE)&amp;&amp;(DESIRED_Sites=!=undefined)">
+      <job comment="Define job constraint and schedds globally for simplicity" query_expr="(JobUniverse==5)&amp;&amp;(GLIDEIN_Is_Monitor =!= TRUE)&amp;&amp;(JOB_Is_Monitor =!= TRUE)">
          <match_attrs>
             <match_attr name="DESIRED_Sites" type="string"/>
          </match_attrs>
          <schedds>
             <schedd DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=cabinet-10-10-5.t2.ucsd.edu" fullname="cabinet-10-10-5.t2.ucsd.edu"/>
-            <schedd DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=ligo-6.pace.gatech.edu" fullname="ligo-6.pace.gatech.edu"/>
+            <schedd DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=ligo-condorsch.pace.gatech.edu" fullname="ligo-condorsch.pace.gatech.edu"/>
          </schedds>
       </job>
    </match>
@@ -118,5 +118,8 @@
       <collector DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=osg-ligo-1.t2.ucsd.edu" group="default" node="osg-ligo-1.t2.ucsd.edu:9620-9660" secondary="True"/>
    </collectors>
    <files>
+     <file absfname="/etc/osg-ligo-fe/scripts/job-wrappers/osg-job-wrapper.sh" after_entry="True" after_group="False" const="True" executable="False" untar="False" wrapper="True">
+         <untar_options cond_attr="TRUE"/>
+      </file>
    </files>
 </frontend>
