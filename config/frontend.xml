@@ -11,10 +11,11 @@
          <process_log backup_count="5" compression="" extension="err" max_days="7.0" max_mbytes="100.0" min_days="3.0" msg_types="DEBUG,ERR,WARN,EXCEPTION"/>
       </process_logs>
    </log_retention>
-   <match match_expr='(not job.has_key("DESIRED_Sites")) or (glidein["attrs"]["GLIDEIN_Site"] in job["DESIRED_Sites"].split(","))' start_expr='(DESIRED_Sites=?=undefined)) || (stringListMember(GLIDEIN_Site,DESIRED_Sites,",")'>
-      <factory query_expr='((stringListMember("LIGO", GLIDEIN_Supported_VOs)))'>
+   <match match_expr='((not job.has_key("DESIRED_Sites")) or (glidein["attrs"]["GLIDEIN_Site"] in job["DESIRED_Sites"].split(","))) and job.get("RequestMemory", 1024)&lt;=glidein["attrs"]["GLIDEIN_MaxMemMBs"]' start_expr='((DESIRED_Sites=?=undefined || stringListMember(GLIDEIN_Site,DESIRED_Sites,","))&amp;&amp;(RequestMemory &lt;= GLIDEIN_MaxMemMBs))'>
+      <factory query_expr='((stringListMember("LIGO", GLIDEIN_Supported_VOs))&amp;&amp;(GLIDEIN_MaxMemMBs=!=UNDEFINED))'>
          <match_attrs>
             <match_attr name="GLIDEIN_Site" type="string"/>
+	    <match_attr name="GLIDEIN_MaxMemMBs" type="int"/>
          </match_attrs>
          <collectors>
          </collectors>
@@ -25,7 +26,7 @@
          </match_attrs>
          <schedds>
             <schedd DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=cabinet-10-10-5.t2.ucsd.edu" fullname="cabinet-10-10-5.t2.ucsd.edu"/>
-            <schedd DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=ligo-condorsch.pace.gatech.edu" fullname="ligo-condorsch.pace.gatech.edu"/>
+            <schedd DN="/DC=com/DC=DigiCert-Grid/O=Open Science Grid/OU=Services/CN=ligo-6.pace.gatech.edu" fullname="ligo-6.pace.gatech.edu"/>
          </schedds>
       </job>
    </match>
@@ -119,6 +120,9 @@
    </collectors>
    <files>
      <file absfname="/etc/osg-ligo-fe/scripts/job-wrappers/osg-job-wrapper.sh" after_entry="True" after_group="False" const="True" executable="False" untar="False" wrapper="True">
+         <untar_options cond_attr="TRUE"/>
+      </file>
+     <file absfname="/etc/osg-ligo-fe/scripts/node-check/cvmfs-check.sh" after_entry="True" after_group="False" const="True" executable="True" untar="False" wrapper="False">
          <untar_options cond_attr="TRUE"/>
       </file>
    </files>
