@@ -17,11 +17,11 @@ glidein_config="$1"
 error_gen=`grep '^ERROR_GEN_PATH ' $glidein_config | awk '{print $2}'`
 # skip test if entry is stampede
 entry_name=`grep "^GLIDEIN_Entry_Name " $glidein_config | awk '{print $2}'`
-echo "Entry name" $entry_name
-if [ $entry_name = "Ligo_US_Stampede"]; then
-    echo "CVMFS not checked because entry is LIGO stampede"
-    exit 0
-fi
+echo "Entry name: " $entry_name
+#if [ $entry_name = "Ligo_US_Stampede"]; then
+#    echo "CVMFS not checked because entry is LIGO stampede"
+#    exit 0
+#fi
 if [ -e "/cvmfs/oasis.opensciencegrid.org/." ]; then
   echo "CVMFS found"
   "$error_gen" -ok "cvmfs/oasis" 

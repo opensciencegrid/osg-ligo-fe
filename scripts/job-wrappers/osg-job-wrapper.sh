@@ -8,7 +8,7 @@ export GLIDEIN_Id=`grep -i '^Name' $_CONDOR_MACHINE_AD`
 echo "PilotID: $GLIDEIN_Id" 1>&2
 
 # Handle LAL data
-
+LAL_DATA_PATH=$(readlink -f $LAL_DATA_PATH)
 # note [[ has different semantics from [ in bash
 if [[ "$LAL_DATA_PATH" == /cvmfs/* ]]; then
   echo "Using CVMFS for LAL data" 1>&2
