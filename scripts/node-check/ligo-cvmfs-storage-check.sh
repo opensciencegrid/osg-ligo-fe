@@ -45,6 +45,16 @@ fi
 info "This is a setup script for the Ligo frontend."
 info "In case of problems, contact Edgar Fajardo (emfajard@ucsd.edu)"
 
+if [ "$glidein_config" != "NONE" ]; then
+    ###########################################################
+    # import advertise and add_condor_vars_line functions
+    add_config_line_source=`grep '^ADD_CONFIG_LINE_SOURCE ' $glidein_config | awk '{print $2}'`
+    source $add_config_line_source
+
+    condor_vars_file=`grep -i "^CONDOR_VARS_FILE " $glidein_config | awk '{print $2}'`
+fi
+
+
 info "Checking for CVMFS availability and attributes..."
 
 FS=ligo.osgstorage.org
