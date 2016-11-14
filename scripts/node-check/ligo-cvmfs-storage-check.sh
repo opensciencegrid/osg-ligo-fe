@@ -4,7 +4,11 @@
  # advertise.                                                                                                                                                                                 
 #                                                                                                                                                                                             
 # All credits to Mats Rynge (rynge@isi.edu)                                                                                                                                                   
-#                                                           
+#
+
+glidein_config="$1"
+
+                                                           
 function info {
     echo "INFO  " $@ 1>&2
 }
