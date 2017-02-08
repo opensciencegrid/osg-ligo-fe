@@ -64,10 +64,21 @@ info "Checking for CVMFS availability and attributes..."
 FS=ligo.osgstorage.org
 RESULT="False"
 FS_ATTR="HAS_CVMFS_LIGO_STORAGE"
-md5sum /cvmfs/$FS/test_access/access_ligo
+if [ -s /cvmfs/$FS/test_access/access_ligo ]; then
+    RESULT="True"
+fi
+advertise $FS_ATTR "$RESULT" "C"
+
+# Test requested by Brian
+FS_ATTR="HAS_LIGO_FRAMES"
+RESULT="False"
+TEST_FILE=/cvmfs/oasis.opensciencegrid.org/ligo/frames/O2/L1_HOFT_C00/L/1164/L-L1_HOFT_C00-1164890112-4096.gwf
+file /cvmfs/oasis.opensciencegrid.org/ligo/frames/O2/L1_HOFT_C00/L/1164/L-L1_HOFT_C00-1164890112-4096.gwf
 if [ $? == 0 ]; then
     RESULT="True"
 fi
 advertise $FS_ATTR "$RESULT" "C"
+
+
 ##################                                                                                                                                                   
 info "All done - time to do some real work!"
