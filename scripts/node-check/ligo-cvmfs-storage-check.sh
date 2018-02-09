@@ -72,8 +72,8 @@ advertise $FS_ATTR "$RESULT" "C"
 # Test requested by Brian
 FS_ATTR="HAS_LIGO_FRAMES"
 RESULT="False"
-TEST_FILE=/cvmfs/oasis.opensciencegrid.org/ligo/frames/O2/L1_HOFT_C00/L/1164/L-L1_HOFT_C00-1164890112-4096.gwf
-head -c 1K /cvmfs/oasis.opensciencegrid.org/ligo/frames/O2/L1_HOFT_C00/L/1164/L-L1_HOFT_C00-1164890112-4096.gwf
+TEST_FILE=/cvmfs/ligo.osgstorage.org/frames/O2/hoft/L1/L-L1_HOFT_C00-11648/L-L1_HOFT_C00-1164890112-4096.gwf
+head -c 1K /cvmfs/ligo.osgstorage.org/frames/O2/hoft/L1/L-L1_HOFT_C00-11648/L-L1_HOFT_C00-1164890112-4096.gwf
 if [ $? == 0 ]; then
     RESULT="True"
 fi
