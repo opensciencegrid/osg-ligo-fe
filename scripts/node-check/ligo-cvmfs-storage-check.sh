@@ -1,9 +1,10 @@
-#!/bin/bash                                                                                                                                                                                  
- #                                                                                                                                                                                            
- # This is script is mostly the sama script that OSG Frontend uses to                                                                                                                        
- # advertise.                                                                                                                                                                                 
-#                                                                                                                                                                                             
-# All credits to Mats Rynge (rynge@isi.edu)                                                                                                                                                   
+#!/bin/bash
+#
+# This is script is mostly the sama script that OSG Frontend uses to                                                                                     
+# advertise.                                                                                                                                             
+  #                                                                                                                                                      
+# All credits to Mats Rynge (rynge@isi.edu)                                                                                                              
+                       
 #
 
 glidein_config="$1"
@@ -18,10 +19,11 @@ function warn {
 }
 
 function advertise {
-    # atype is the type of the value as defined by GlideinWMS:                                                                                                                               
-    #   I - integer                                                                                                                                                                          
-   #   S - quoted string                                                                                                                                                                 
-    #   C - unquoted string (i.e. Condor keyword or expression)                                                                                                                              
+    # atype is the type of the value as defined by GlideinWMS:                                                                                           
+    #   I - integer                                                                                                                                     
+    #   S - quoted string                                                                                                                             
+    #   C - unquoted string (i.e. Condor keyword or expression)                                                                                       
+                                       
     
     key="$1"
     value="$2"
@@ -69,15 +71,31 @@ if [ -s /cvmfs/$FS/test_access/access_ligo ]; then
 fi
 advertise $FS_ATTR "$RESULT" "C"
 
+FS_ATTR="HAS_CVMFS_LIGO_CONTAINERS"
+RESULT="False"
+if [ -s /cvmfs/ligo-containers.opensciencegrid.org/lscsoft/bayeswave/master ]; then
+    RESULT="True"
+fi
+advertise $FS_ATTR "$RESULT" "C"
+
 # Test requested by Brian
 FS_ATTR="HAS_LIGO_FRAMES"
 RESULT="False"
-TEST_FILE=/cvmfs/oasis.opensciencegrid.org/ligo/frames/O2/L1_HOFT_C00/L/1164/L-L1_HOFT_C00-1164890112-4096.gwf
-head -c 1K /cvmfs/oasis.opensciencegrid.org/ligo/frames/O2/L1_HOFT_C00/L/1164/L-L1_HOFT_C00-1164890112-4096.gwf
+TEST_FILE=/cvmfs/ligo.osgstorage.org/frames/O2/hoft_C02/H1/H-H1_HOFT_C02-11645/H-H1_HOFT_C02-1164554240-4096.gwf
+head -c 1K $TEST_FILE
 if [ $? == 0 ]; then
     RESULT="True"
 fi
 advertise $FS_ATTR "$RESULT" "C"
+
+if [ $RESULT != "True" ]; then
+   TEST_FILE=/cvmfs/oasis.opensciencegrid.org/ligo/frames/O2/hoft_C02/H1/H-H1_HOFT_C02-11645/H-H1_HOFT_C02-1164554240-4096.gwf
+   head -c 1K $TEST_FILE
+   if [ $? == 0 ]; then
+    RESULT="True"
+   fi
+   advertise $FS_ATTR "$RESULT" "C"
+fi
 
 
 ##################                                                                                                                                                   
