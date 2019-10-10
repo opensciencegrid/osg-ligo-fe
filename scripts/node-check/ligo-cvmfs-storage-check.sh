@@ -83,10 +83,19 @@ FS_ATTR="HAS_LIGO_FRAMES"
 RESULT="False"
 
 TEST_FILE=`shuf -n 1 client/frame_files_small.txt`
-head -c 1K $TEST_FILE
-if [ $? == 0 ]; then
+entry_name=`grep "^GLIDEIN_Entry_Name " $glidein_config | awk '{print $2}'`
+if [ $entry_name = "VIRGO_T2_BE_UCL_ingrid" ]; then
+  setsid head -c 1K $TEST_FILE
+  if [ $? == 0 ]; then
     RESULT="True"
+  fi
+else
+  head -c 1K $TEST_FILE
+  if [ $? == 0 ]; then
+    RESULT="True"
+  fi
 fi
+
 advertise $FS_ATTR "$RESULT" "C"
 
 if [ $RESULT != "True" ]; then
