@@ -85,10 +85,15 @@ RESULT="False"
 TEST_FILE=`shuf -n 1 client/frame_files_small.txt`
 entry_name=`grep "^GLIDEIN_Entry_Name " $glidein_config | awk '{print $2}'`
 if [ $entry_name = "VIRGO_T2_BE_UCL_ingrid" ]; then
-  setsid head -c 1K $TEST_FILE
+  setsid head -c 1K $TEST_FILE 1> ${FS_ATTR}.out 2> ${FS_ATTR}.err
   if [ $? == 0 ]; then
-    RESULT="True"
-  fi
+        if [ -s ${FS_ATTR}.err ]; then
+            cat ${FS_ATTR}.err
+        else
+            RESULT="True"
+        fi
+    fi
+    rm ${FS_ATTR}.out ${FS_ATTR}.err
 else
   head -c 1K $TEST_FILE
   if [ $? == 0 ]; then
