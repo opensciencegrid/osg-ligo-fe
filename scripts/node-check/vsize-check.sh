@@ -20,7 +20,7 @@ if [ $vsize == "unlimited" ]; then
 fi
 if [ $vsize -le 3000000 ]; then 
   echo "ulimit -sV less than 3000000"
-  "$error_gen" -error "ulimit -sV less than 3000000" "WN_Resource" "VSize too smal" "file" "vsizey"
+  "$error_gen" -error "ulimit -Sv less than 3000000" "WN_Resource" "VSize too small" "file" "vsizey"
   exit 1
 fi
 exit 0

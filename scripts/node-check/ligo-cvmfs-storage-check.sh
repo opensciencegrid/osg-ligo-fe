@@ -138,6 +138,10 @@ if [ $RESULT != "True" ]; then
     advertise $FS_ATTR "$RESULT" "C"
 fi
 
+## Advertising a new variable with same value has HAS_LIGO_FRAMES
+FS_ATTR="HAS_CVMFS_IGWN_PRIVATE_DATA"
+advertise $FS_ATTR "$RESULT" "C"
+
 
 ##################                                                                                                                                                   
 info "All done - time to do some real work!"
