@@ -1,5 +1,5 @@
 <frontend advertise_delay="5" advertise_with_multiple="True" advertise_with_tcp="True" downtimes_file="frontenddowntime" frontend_monitor_index_page="False" frontend_name="osg-ligo-1-t2-ucsd-edu_OSG_gWMSFrontend" frontend_versioning="False" group_parallel_workers="2" loop_delay="60" restart_attempts="3" restart_interval="1800">
-   <config>
+   <config ignore_down_entries="False">
       <idle_vms_total curb="3000" max="4000"/>
       <idle_vms_total_global curb="3000" max="4000"/>
       <running_glideins_total curb="90000" max="100000"/>
@@ -15,18 +15,18 @@
          <process_log backup_count="5" compression="" extension="err" max_days="7.0" max_mbytes="100.0" min_days="3.0" msg_types="DEBUG,ERR,WARN,EXCEPTION"/>
       </process_logs>
    </log_retention>
-   <match match_expr='((glidein["attrs"]["GLIDEIN_Site"] in job.get("DESIRED_Sites","").split(",")) or (glidein["attrs"]["GLIDEIN_Site"] in job.get("DESIRED_XSEDE_Sites","").split(","))  or (job.get("DESIRED_Sites","nosite")=="nosite")) and (job.get("RequestMemory", 1020)&lt;=glidein["attrs"]["GLIDEIN_MaxMemMBs"]) and ((job.get("REQUIRED_OS", "any")=="any") or (job.get("REQUIRED_OS")==glidein["attrs"]["GLIDEIN_REQUIRED_OS"])) and (job.get("UNDESIRED_Sites","nosite")=="nosite" or (glidein["attrs"]["GLIDEIN_Site"] not in job.get("UNDESIRED_Sites","").split(",")))' start_expr='(OpenScienceGrid =?=True || is_itb=?=True)&amp;&amp;((DESIRED_Sites=?=undefined) || stringListMember(GLIDEIN_Site,DESIRED_Sites,",")) &amp;&amp;(RequestMemory &lt;=GLIDEIN_MaxMemMBs)&amp;&amp; ((isUndefined(REQUIRED_OS)) || (REQUIRED_OS=?="any") || (REQUIRED_OS=?=GLIDEIN_REQUIRED_OS))&amp;&amp;(UNDESIRED_Sites=?=undefined || !stringListMember(GLIDEIN_Site,UNDESIRED_Sites,",")) '>
-      <factory query_expr="GLIDEIN_MaxMemMBs=!=UNDEFINED">
+   <match match_expr='((glidein["attrs"]["GLIDEIN_Site"] in job.get("DESIRED_Sites","").split(",")) or (glidein["attrs"]["GLIDEIN_Site"] in job.get("DESIRED_XSEDE_Sites","").split(","))  or (job.get("DESIRED_Sites","nosite")=="nosite")) and (job.get("RequestMemory", 1020)&lt;=glidein["attrs"]["GLIDEIN_MaxMemMBs"]) and ((job.get("REQUIRED_OS", "any")=="any") or (job.get("REQUIRED_OS")==glidein["attrs"]["GLIDEIN_REQUIRED_OS"])) and (job.get("UNDESIRED_Sites","nosite")=="nosite" or (glidein["attrs"]["GLIDEIN_Site"] not in job.get("UNDESIRED_Sites","").split(",")))' start_expr='((DESIRED_Sites=?=undefined) || stringListMember(GLIDEIN_Site,DESIRED_Sites,",")) &amp;&amp;(RequestMemory &lt;=GLIDEIN_MaxMemMBs)&amp;&amp; ((isUndefined(REQUIRED_OS)) || (REQUIRED_OS=?="any") || (REQUIRED_OS=?=GLIDEIN_REQUIRED_OS))&amp;&amp;(UNDESIRED_Sites=?=undefined || !stringListMember(GLIDEIN_Site,UNDESIRED_Sites,",")) '>
+      <factory query_expr="GLIDEIN_MaxMemMBs=!=UNDEFINED">  
          <match_attrs>
             <match_attr name="GLIDEIN_MaxMemMBs" type="int"/>
             <match_attr name="GLIDEIN_REQUIRED_OS" type="string"/>
             <match_attr name="GLIDEIN_Site" type="string"/>
          </match_attrs>
          <collectors>
-            <collector DN="/DC=org/DC=opensciencegrid/O=Open Science Grid/OU=Services/CN=gfactory-1.t2.ucsd.edu" factory_identity="gfactory@gfactory-1.t2.ucsd.edu" my_identity="feligo@gfactory-1.t2.ucsd.edu" node="gfactory-1.t2.ucsd.edu"/>
+            <collector DN="/DC=org/DC=incommon/C=US/ST=WI/L=Madison/O=University of Wisconsin-Madison/OU=OCIS/CN=gfactory-2.opensciencegrid.org" factory_identity="gfactory@gfactory-2.opensciencegrid.org" my_identity="feligo@gfactory-2.opensciencegrid.org" node="gfactory-2.opensciencegrid.org"/>
          </collectors>
       </factory>
-      <job comment="Define job constraint and schedds globally for simplicity" query_expr="(OpenScienceGrid =?=True || is_itb=?=True)&amp;&amp; (JobUniverse==5)&amp;&amp;(GLIDEIN_Is_Monitor =!= TRUE)&amp;&amp;(JOB_Is_Monitor =!= TRUE)">
+      <job comment="Define job constraint and schedds globally for simplicity" query_expr="(JobUniverse==5)&amp;&amp;(GLIDEIN_Is_Monitor =!= TRUE)&amp;&amp;(JOB_Is_Monitor =!= TRUE)">
          <match_attrs>
             <match_attr name="DESIRED_Sites" type="string"/>
             <match_attr name="DESIRED_XSEDE_Sites" type="string"/>
@@ -35,39 +35,41 @@
             <match_attr name="UNDESIRED_Sites" type="string"/>
          </match_attrs>
          <schedds>
-            <schedd DN="/DC=org/DC=opensciencegrid/O=Open Science Grid/OU=Services/CN=osg-login1.pace.gatech.edu" fullname="osg-login1.pace.gatech.edu"/>
-            <schedd DN="/DC=org/DC=opensciencegrid/O=Open Science Grid/OU=Services/CN=sugwg-osg.phy.syr.edu" fullname="sugwg-osg.phy.syr.edu"/>
-            <schedd DN="/DC=org/DC=incommon/C=US/postalCode=13244/ST=NY/L=Syracuse/street=201 Physics Building/O=Syracuse University/OU=AS PHY/CN=sugwg-condor.phy.syr.edu" fullname="sugwg-condor.phy.syr.edu"/>
+            <schedd DN="/DC=org/DC=incommon/C=US/ST=GA/L=Atlanta/O=Georgia Institute of Technology/OU=Office of Information Technology/CN=osg-login1.pace.gatech.edu" fullname="osg-login1.pace.gatech.edu"/>
             <schedd DN="/DC=org/DC=incommon/C=US/postalCode=91125/ST=CA/L=Pasadena/O=California Institute of Technology/OU=Laser Interferometer Gravitational-Wave Observatory/CN=ldas-osg.ligo-la.caltech.edu" fullname="ldas-osg.ligo-la.caltech.edu"/>
-            <schedd DN="/DC=org/DC=incommon/C=US/postalCode=91125/ST=CA/L=Pasadena/street=1200 East California Blvd/O=California Institute of Technology/OU=Laser Interferometer Gravitational-Wave Observatory/CN=ldas-osg.ligo.caltech.edu" fullname="ldas-osg.ligo.caltech.edu"/>
-            <schedd DN="/DC=org/DC=incommon/C=US/postalCode=91125/ST=CA/L=Pasadena/street=1200 E. California Blvd./O=California Institute of Technology/OU=Laser Interferometer Gravitational-Wave Observatory/CN=ldas-osg.ligo-wa.caltech.edu" fullname="ldas-osg.ligo-wa.caltech.edu"/>
+            <schedd DN="/DC=org/DC=incommon/C=US/ST=California/L=Pasadena/O=California Institute of Technology/OU=Laser Interferometer Gravitational-Wave Observatory/CN=ldas-osg.ligo.caltech.edu" fullname="ldas-osg.ligo.caltech.edu"/>
+            <schedd DN="/DC=org/DC=incommon/C=US/postalCode=91125/ST=CA/L=Pasadena/street=1200 East California Blvd/O=California Institute of Technology/OU=Laser Interferometer Gravitational-Wave Observatory/CN=ldas-osg.ligo-wa.caltech.edu" fullname="ldas-osg.ligo-wa.caltech.edu"/>
+            <schedd DN="/DC=org/DC=terena/DC=tcs/C=NL/L=Amsterdam/O=Nikhef/CN=stro.nikhef.nl" fullname="stro.nikhef.nl"/>
          </schedds>
       </job>
    </match>
    <monitor base_dir="/var/lib/gwms-frontend/web-area/monitor" flot_dir="/usr/share/javascriptrrd/flot" javascriptRRD_dir="/usr/share/javascriptrrd/js" jquery_dir="/usr/share/javascriptrrd/flot"/>
    <monitor_footer display_txt="" href_link=""/>
-   <security classad_proxy="/tmp/vo_proxy" proxy_DN="/DC=org/DC=opensciencegrid/O=Open Science Grid/OU=Services/CN=osg-ligo-1.t2.ucsd.edu" proxy_selection_plugin="ProxyAll" security_name="LIGO" sym_key="aes_256_cbc">
+   <security classad_proxy="/tmp/vo_proxy" proxy_DN="/DC=org/DC=incommon/C=US/ST=CA/L=La Jolla/O=University of California, San Diego/OU=UCSD/CN=osg-ligo-1.t2.ucsd.edu" proxy_selection_plugin="ProxyAll" security_name="LIGO" sym_key="aes_256_cbc">
       <credentials>
       </credentials>
    </security>
    <stage base_dir="/var/lib/gwms-frontend/web-area/stage" use_symlink="True" web_base_url="http://osg-ligo-1.t2.ucsd.edu/vofrontend/stage"/>
    <work base_dir="/var/lib/gwms-frontend/vofrontend" base_log_dir="/var/log/gwms-frontend"/>
    <attrs>
-      <attr name="CONDOR_VERSION" glidein_publish="False" job_publish="False" parameter="True" type="string" value="8.6.x"/>
+      <attr name="CONDOR_OS" glidein_publish="False" job_publish="False" parameter="True" type="string" value="auto"/>
+      <attr name="CONDOR_VERSION" glidein_publish="False" job_publish="False" parameter="True" type="string" value="8.9.4"/>
+      <attr name="GLIDECLIENT_OSG_VO" glidein_publish="True" job_publish="True" parameter="False" type="string" value="IGWN"/>
       <attr name="GLIDECLIENT_Rank" glidein_publish="False" job_publish="False" parameter="True" type="string" value="1"/>
       <attr name="GLIDEIN_CLAIM_WORKLIFE" glidein_publish="False" job_publish="False" parameter="True" type="int" value="10800"/>
       <attr name="GLIDEIN_Expose_Grid_Env" glidein_publish="True" job_publish="True" parameter="False" type="string" value="True"/>
       <attr name="GLIDEIN_Glexec_Use" glidein_publish="True" job_publish="True" parameter="False" type="string" value="NEVER"/>
-      <attr name="GLIDEIN_Job_Max_Time" glidein_publish="True" job_publish="False" parameter="True" type="int" value="10800"/>
+      <attr name="GLIDEIN_Job_Max_Time" glidein_publish="True" job_publish="False" parameter="True" type="int" value="36200"/>
       <attr name="GLIDEIN_Max_Idle" glidein_publish="True" job_publish="False" parameter="True" type="int" value="2400"/>
-      <attr name="OSG_SINGULARITY_EL7_PERCENT" glidein_publish="False" job_publish="False" parameter="True" type="expr" value="70"/>
+      <attr name="LIGO_DATAFIND_SERVER" glidein_publish="True" job_publish="True" parameter="False" type="string" value="datafind.ligo.org:443"/>
+      <attr name="OSG_SINGULARITY_EL7_PERCENT" glidein_publish="False" job_publish="False" parameter="True" type="expr" value="100"/>
       <attr name="SLOTS_LAYOUT" glidein_publish="True" job_publish="True" parameter="False" type="string" value="partitionable"/>
-      <attr name="STARTD_JOB_ATTRS" glidein_publish="True" job_publish="False" parameter="True" type="string" value="x509userproxysubject,x509UserProxyFQAN,x509UserProxyVOName,x509UserProxyEmail,x509UserProxyExpiration,ProjectName"/>
+      <attr name="STARTD_JOB_ATTRS" glidein_publish="True" job_publish="False" parameter="True" type="string" value="x509userproxysubject,x509UserProxyFQAN,x509UserProxyVOName,x509UserProxyEmail,x509UserProxyExpiration,ProjectName,LigoSearchTag,LigoSearchUser,RequestMemory"/>
       <attr name="USE_MATCH_AUTH" glidein_publish="False" job_publish="False" parameter="True" type="string" value="True"/>
    </attrs>
    <groups>
       <group name="Comet" enabled="True">
-         <config>
+         <config ignore_down_entries="">
             <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
             <idle_glideins_lifetime max="0"/>
             <idle_glideins_per_entry max="200" reserve="50"/>
@@ -104,7 +106,7 @@
          </files>
       </group>
       <group name="Stampede" enabled="True">
-         <config>
+         <config ignore_down_entries="">
             <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
             <idle_glideins_lifetime max="0"/>
             <idle_glideins_per_entry max="200" reserve="50"/>
@@ -140,7 +142,7 @@
          </files>
       </group>
       <group name="blueWaters" enabled="True">
-         <config>
+         <config ignore_down_entries="">
             <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
             <idle_glideins_lifetime max="0"/>
             <idle_glideins_per_entry max="200" reserve="50"/>
@@ -182,7 +184,7 @@
          </files>
       </group>
       <group name="itb-ligo" enabled="True">
-         <config>
+         <config ignore_down_entries="">
             <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
             <idle_glideins_lifetime max="0"/>
             <idle_glideins_per_entry max="100" reserve="5"/>
@@ -193,17 +195,18 @@
             <running_glideins_total curb="90000" max="100000"/>
          </config>
          <match match_expr="True" start_expr="(is_itb)">
-            <factory query_expr='stringListMember("LIGO",GLIDEIN_Supported_VOs)'>
+            <factory query_expr='stringListMember("LIGO",GLIDEIN_Supported_VOs) &amp;&amp; FactoryType == "OSG-ITB"'>
                <match_attrs>
                </match_attrs>
                <collectors>
+                  <collector DN="/DC=org/DC=incommon/C=US/ST=WI/L=Madison/O=University of Wisconsin-Madison/OU=OCIS/CN=gfactory-itb-1.opensciencegrid.org" factory_identity="gfactory@gfactory-itb-1.opensciencegrid.org" my_identity="feligo@gfactory-itb-1.opensciencegrid.org" node="gfactory-itb-1.opensciencegrid.org"/>
                </collectors>
             </factory>
             <job query_expr="(!isUndefined(is_itb) &amp;&amp; is_itb)">
                <match_attrs>
                </match_attrs>
                <schedds>
-                  <schedd DN="/DC=org/DC=opensciencegrid/O=Open Science Grid/OU=Services/CN=cabinet-10-10-4.t2.ucsd.edu" fullname="cabinet-10-10-4.t2.ucsd.edu"/>
+                  <schedd DN="/DC=org/DC=incommon/C=US/ST=CA/L=La Jolla/O=University of California, San Diego/OU=UCSD/CN=cabinet-10-10-4.t2.ucsd.edu" fullname="cabinet-10-10-4.t2.ucsd.edu"/>
                </schedds>
             </job>
          </match>
@@ -213,12 +216,68 @@
             </credentials>
          </security>
          <attrs>
+            <attr name="CONDOR_VERSION" glidein_publish="False" job_publish="False" parameter="True" type="string" value="8.9.4"/>
+            <attr name="GLIDEIN_DEBUG_OPTIONS" glidein_publish="True" job_publish="True" parameter="False" type="string" value="userjob"/>
+            <attr name="GLIDEIN_DEBUG_OUTPUT" glidein_publish="True" job_publish="True" parameter="False" type="string" value="true"/>
+            <attr name="GLIDEIN_Singularity_Use" glidein_publish="True" job_publish="True" parameter="False" type="string" value="PREFERRED"/>
+            <attr name="SINGULARITY_IMAGES_DICT" glidein_publish="True" job_publish="True" parameter="False" type="string" value="default:/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo:el6,rhel7:/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo:el7"/>
          </attrs>
          <files>
+            <file absfname="/var/lib/gwms-frontend/web-base/frontend/generic_pre_singularity_setup.sh" after_entry="False" const="True" executable="True" period="0" prefix="GLIDEIN_PS_" untar="False" wrapper="False">
+               <untar_options cond_attr="TRUE"/>
+            </file>
+            <file absfname="/var/lib/gwms-frontend/web-base/frontend/default_singularity_wrapper.sh" after_entry="True" const="True" executable="False" period="0" prefix="GLIDEIN_PS_" untar="False" wrapper="True">
+               <untar_options cond_attr="TRUE"/>
+            </file>
+         </files>
+      </group>
+      <group name="itb-ligo-gpu" enabled="True">
+         <config ignore_down_entries="">
+            <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
+            <idle_glideins_lifetime max="0"/>
+            <idle_glideins_per_entry max="100" reserve="5"/>
+            <idle_vms_per_entry curb="5" max="100"/>
+            <idle_vms_total curb="200" max="1000"/>
+            <processing_workers matchmakers="3"/>
+            <running_glideins_per_entry max="10000" min="0" relative_to_queue="1.15"/>
+            <running_glideins_total curb="90000" max="100000"/>
+         </config>
+         <match match_expr="True" start_expr="(is_itb)&amp;&amp;(TARGET.Requestgpus &gt;= 1)">
+            <factory query_expr='stringListMember("LIGOGPU", GLIDEIN_Supported_VOs)&amp;&amp;GLIDEIN_Site=!="Stampede" &amp;&amp;GLIDEIN_Site=!="Comet" &amp;&amp; FactoryType == "OSG-ITB"'>
+               <match_attrs>
+               </match_attrs>
+               <collectors>
+                  <collector DN="/DC=org/DC=incommon/C=US/ST=WI/L=Madison/O=University of Wisconsin-Madison/OU=OCIS/CN=gfactory-itb-1.opensciencegrid.org" factory_identity="gfactory@gfactory-itb-1.opensciencegrid.org" my_identity="feligo@gfactory-itb-1.opensciencegrid.org" node="gfactory-itb-1.opensciencegrid.org"/>
+               </collectors>
+            </factory>
+            <job query_expr="(!isUndefined(is_itb) &amp;&amp; is_itb) &amp;&amp;(RequestGPUs=!=undefined)">
+               <match_attrs>
+               </match_attrs>
+               <schedds>
+               </schedds>
+            </job>
+         </match>
+         <security>
+            <credentials>
+               <credential absfname="/tmp/pilot_proxy" security_class="frontend" trust_domain="grid" type="grid_proxy"/>
+            </credentials>
+         </security>
+         <attrs>
+            <attr name="CONDOR_VERSION" glidein_publish="False" job_publish="False" parameter="True" type="string" value="8.9.4"/>
+            <attr name="GLIDEIN_Singularity_Use" glidein_publish="True" job_publish="True" parameter="False" type="string" value="PREFERRED"/>
+            <attr name="SINGULARITY_IMAGES_DICT" glidein_publish="True" job_publish="True" parameter="False" type="string" value="default:/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo-el7-cuda10:latest,rhel6:/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo-el6-cuda10:latest"/>
+         </attrs>
+         <files>
+            <file absfname="/var/lib/gwms-frontend/web-base/frontend/generic_pre_singularity_setup.sh" after_entry="False" const="True" executable="True" period="0" prefix="GLIDEIN_PS_" untar="False" wrapper="False">
+               <untar_options cond_attr="TRUE"/>
+            </file>
+            <file absfname="/var/lib/gwms-frontend/web-base/frontend/default_singularity_wrapper.sh" after_entry="True" const="True" executable="False" period="0" prefix="GLIDEIN_PS_" untar="False" wrapper="True">
+               <untar_options cond_attr="TRUE"/>
+            </file>
          </files>
       </group>
       <group name="itb-virgo" enabled="True">
-         <config>
+         <config ignore_down_entries="">
             <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
             <idle_glideins_lifetime max="0"/>
             <idle_glideins_per_entry max="100" reserve="5"/>
@@ -229,17 +288,18 @@
             <running_glideins_total curb="90000" max="100000"/>
          </config>
          <match match_expr="True" start_expr="(is_itb)">
-            <factory query_expr='stringListMember("VIRGO", GLIDEIN_Supported_VOs)'>
+            <factory query_expr='stringListMember("VIRGO", GLIDEIN_Supported_VOs) &amp;&amp; (FactoryType == "OSG-ITB" || FactoryType == "CERN-ITB-Dev")'>
                <match_attrs>
                </match_attrs>
                <collectors>
+                  <collector DN="/DC=org/DC=incommon/C=US/ST=WI/L=Madison/O=University of Wisconsin-Madison/OU=OCIS/CN=gfactory-itb-1.opensciencegrid.org" factory_identity="gfactory@gfactory-itb-1.opensciencegrid.org" my_identity="feligo@gfactory-itb-1.opensciencegrid.org" node="gfactory-itb-1.opensciencegrid.org"/>
                </collectors>
             </factory>
             <job query_expr="(!isUndefined(is_itb) &amp;&amp; is_itb)  &amp;&amp; (isUndefined(Virgo) || Virgo=?=True)">
                <match_attrs>
                </match_attrs>
                <schedds>
-                  <schedd DN="/DC=org/DC=opensciencegrid/O=Open Science Grid/OU=Services/CN=cabinet-10-10-4.t2.ucsd.edu" fullname="cabinet-10-10-4.t2.ucsd.edu"/>
+                  <schedd DN="/DC=org/DC=incommon/C=US/ST=CA/L=La Jolla/O=University of California, San Diego/OU=UCSD/CN=cabinet-10-10-4.t2.ucsd.edu" fullname="cabinet-10-10-4.t2.ucsd.edu"/>
                </schedds>
             </job>
          </match>
@@ -249,12 +309,67 @@
             </credentials>
          </security>
          <attrs>
+            <attr name="CONDOR_VERSION" glidein_publish="False" job_publish="False" parameter="True" type="string" value="8.9.4"/>
+            <attr name="GLIDEIN_DEBUG_OPTIONS" glidein_publish="True" job_publish="True" parameter="False" type="string" value="userjob"/>
+            <attr name="GLIDEIN_DEBUG_OUTPUT" glidein_publish="True" job_publish="True" parameter="False" type="string" value="true"/>
+            <attr name="GLIDEIN_Singularity_Use" glidein_publish="True" job_publish="True" parameter="False" type="string" value="PREFERRED"/>
+            <attr name="SINGULARITY_IMAGES_DICT" glidein_publish="True" job_publish="True" parameter="False" type="string" value="default:/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo:el6,rhel7:/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo:el7"/>
          </attrs>
          <files>
+            <file absfname="/var/lib/gwms-frontend/web-base/frontend/generic_pre_singularity_setup.sh" after_entry="False" const="True" executable="True" period="0" prefix="GLIDEIN_PS_" untar="False" wrapper="False">
+               <untar_options cond_attr="TRUE"/>
+            </file>
+            <file absfname="/var/lib/gwms-frontend/web-base/frontend/default_singularity_wrapper.sh" after_entry="True" const="True" executable="False" period="0" prefix="GLIDEIN_PS_" untar="False" wrapper="True">
+               <untar_options cond_attr="TRUE"/>
+            </file>
+         </files>
+      </group>
+      <group name="itb-virgo-gpu" enabled="True">
+         <config ignore_down_entries="">
+            <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
+            <idle_glideins_lifetime max="0"/>
+            <idle_glideins_per_entry max="100" reserve="5"/>
+            <idle_vms_per_entry curb="5" max="100"/>
+            <idle_vms_total curb="200" max="1000"/>
+            <processing_workers matchmakers="3"/>
+            <running_glideins_per_entry max="10000" min="0" relative_to_queue="1.15"/>
+            <running_glideins_total curb="90000" max="100000"/>
+         </config>
+         <match match_expr="True" start_expr="(is_itb)&amp;&amp;(TARGET.Requestgpus &gt;= 1)">
+            <factory query_expr='stringListMember("VIRGOGPU", GLIDEIN_Supported_VOs)&amp;&amp;FactoryType == "OSG-ITB"'>
+               <match_attrs>
+               </match_attrs>
+               <collectors>
+                  <collector DN="/DC=org/DC=incommon/C=US/ST=WI/L=Madison/O=University of Wisconsin-Madison/OU=OCIS/CN=gfactory-itb-1.opensciencegrid.org" factory_identity="gfactory@gfactory-itb-1.opensciencegrid.org" my_identity="feligo@gfactory-itb-1.opensciencegrid.org" node="gfactory-itb-1.opensciencegrid.org"/>
+               </collectors>
+            </factory>
+            <job query_expr="(!isUndefined(is_itb) &amp;&amp; is_itb) &amp;&amp;(RequestGPUs=!=undefined)">
+               <match_attrs>
+               </match_attrs>
+               <schedds>
+               </schedds>
+            </job>
+         </match>
+         <security>
+            <credentials>
+               <credential absfname="/tmp/pilot_virgo_proxy" security_class="frontend" trust_domain="grid" type="grid_proxy"/>
+            </credentials>
+         </security>
+         <attrs>
+            <attr name="GLIDEIN_Singularity_Use" glidein_publish="True" job_publish="True" parameter="False" type="string" value="PREFERRED"/>
+            <attr name="SINGULARITY_IMAGES_DICT" glidein_publish="True" job_publish="True" parameter="False" type="string" value="default:/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo:el6,rhel7:/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo:el7"/>
+         </attrs>
+         <files>
+            <file absfname="/var/lib/gwms-frontend/web-base/frontend/generic_pre_singularity_setup.sh" after_entry="False" const="True" executable="True" period="0" prefix="GLIDEIN_PS_" untar="False" wrapper="False">
+               <untar_options cond_attr="TRUE"/>
+            </file>
+            <file absfname="/var/lib/gwms-frontend/web-base/frontend/default_singularity_wrapper.sh" after_entry="True" const="True" executable="False" period="0" prefix="GLIDEIN_PS_" untar="False" wrapper="True">
+               <untar_options cond_attr="TRUE"/>
+            </file>
          </files>
       </group>
       <group name="main" enabled="True">
-         <config>
+         <config ignore_down_entries="">
             <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
             <idle_glideins_lifetime max="0"/>
             <idle_glideins_per_entry max="500" reserve="5"/>
@@ -271,7 +386,7 @@
                <collectors>
                </collectors>
             </factory>
-            <job query_expr="isUndefined(is_itb)">
+            <job query_expr="isUndefined(is_itb) &amp;&amp;(RequestGPUs=?=undefined)">
                <match_attrs>
                   <match_attr name="desired_arch" type="string"/>
                </match_attrs>
@@ -289,63 +404,27 @@
          <files>
          </files>
       </group>
-      <group name="specific_arch" enabled="False">
-         <config>
+      <group name="main-gpu" enabled="True">
+         <config ignore_down_entries="">
             <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
             <idle_glideins_lifetime max="0"/>
-            <idle_glideins_per_entry max="100" reserve="5"/>
-            <idle_vms_per_entry curb="5" max="100"/>
-            <idle_vms_total curb="200" max="1000"/>
+            <idle_glideins_per_entry max="500" reserve="5"/>
+            <idle_vms_per_entry curb="200" max="500"/>
+            <idle_vms_total curb="3000" max="7000"/>
             <processing_workers matchmakers="3"/>
-            <running_glideins_per_entry max="10000" min="0" relative_to_queue="1.15"/>
+            <running_glideins_per_entry max="10000" min="0" relative_to_queue="5"/>
             <running_glideins_total curb="90000" max="100000"/>
          </config>
-         <match match_expr='glidein["attrs"]["GLIDEIN_PROVIDED_ARCH"]==job["desired_arch"]' start_expr="(desired_arch=!=undefined)&amp;&amp;(GLIDEIN_PROVIDED_ARCH=!=undefined)&amp;&amp;(GLIDEIN_PROVIDED_ARCH=?=desired_arch)">
-            <factory query_expr='stringListMember("LIGO", GLIDEIN_Supported_VOs)&amp;&amp;GLIDEIN_PROVIDED_ARCH=!=undefined'>
-               <match_attrs>
-                  <match_attr name="GLIDEIN_PROVIDED_ARCH" type="string"/>
-               </match_attrs>
-               <collectors>
-               </collectors>
-            </factory>
-            <job query_expr="desired_arch=!=undefined">
-               <match_attrs>
-                  <match_attr name="desired_arch" type="string"/>
-               </match_attrs>
-               <schedds>
-               </schedds>
-            </job>
-         </match>
-         <security>
-            <credentials>
-               <credential absfname="/tmp/pilot_proxy" security_class="frontend" trust_domain="grid" type="grid_proxy"/>
-            </credentials>
-         </security>
-         <attrs>
-         </attrs>
-         <files>
-         </files>
-      </group>
-      <group name="syracuse" enabled="True">
-         <config>
-            <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
-            <idle_glideins_lifetime max="0"/>
-            <idle_glideins_per_entry max="200" reserve="50"/>
-            <idle_vms_per_entry curb="200" max="300"/>
-            <idle_vms_total curb="800" max="1000"/>
-            <processing_workers matchmakers="3"/>
-            <running_glideins_per_entry max="10000" min="0" relative_to_queue="1.5"/>
-            <running_glideins_total curb="90000" max="100000"/>
-         </config>
-         <match match_expr='not job.has_key("desired_arch")' start_expr="((is_itb=?=undefined)||(!is_itb))&amp;&amp;(TARGET.desired_arch=?=undefined)">
-            <factory query_expr='GLIDEIN_Site=?="SU-OG" &amp;&amp; stringListMember("VIRGO", GLIDEIN_Supported_VOs)'>
+         <match match_expr="True" start_expr="((is_itb=?=undefined)||(!is_itb))&amp;&amp;(TARGET.desired_arch=?=undefined)&amp;&amp;(TARGET.Requestgpus &gt;= 1)">
+            <factory query_expr='stringListMember("LIGOGPU", GLIDEIN_Supported_VOs)&amp;&amp;GLIDEIN_Site=!="Stampede" &amp;&amp;GLIDEIN_Site=!="Comet"'>
                <match_attrs>
                </match_attrs>
                <collectors>
                </collectors>
             </factory>
-            <job query_expr="(is_itb=?=undefined)||(!is_itb)">
+            <job query_expr="isUndefined(is_itb)&amp;&amp;(RequestGPUs=!=undefined)">
                <match_attrs>
+                  <match_attr name="Requestgpus" type="int"/>
                   <match_attr name="desired_arch" type="string"/>
                </match_attrs>
                <schedds>
@@ -363,7 +442,7 @@
          </files>
       </group>
       <group name="virgo" enabled="True">
-         <config>
+         <config ignore_down_entries="">
             <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
             <idle_glideins_lifetime max="0"/>
             <idle_glideins_per_entry max="800" reserve="5"/>
@@ -380,7 +459,42 @@
                <collectors>
                </collectors>
             </factory>
-            <job query_expr="(isUndefined(is_itb)) &amp;&amp; (isUndefined(Virgo) || Virgo=?=True)">
+            <job query_expr="(isUndefined(is_itb)) &amp;&amp; (isUndefined(Virgo) || Virgo=?=True) &amp;&amp;(RequestGPUs=?=undefined)">
+               <match_attrs>
+               </match_attrs>
+               <schedds>
+               </schedds>
+            </job>
+         </match>
+         <security>
+            <credentials>
+               <credential absfname="/tmp/pilot_virgo_proxy" security_class="frontend" trust_domain="grid" type="grid_proxy"/>
+            </credentials>
+         </security>
+         <attrs>
+         </attrs>
+         <files>
+         </files>
+      </group>
+      <group name="virgo-gpu" enabled="True">
+         <config ignore_down_entries="">
+            <glideins_removal margin="0" requests_tracking="False" type="NO" wait="0"/>
+            <idle_glideins_lifetime max="0"/>
+            <idle_glideins_per_entry max="100" reserve="5"/>
+            <idle_vms_per_entry curb="5" max="100"/>
+            <idle_vms_total curb="200" max="1000"/>
+            <processing_workers matchmakers="3"/>
+            <running_glideins_per_entry max="10000" min="0" relative_to_queue="1.15"/>
+            <running_glideins_total curb="90000" max="100000"/>
+         </config>
+         <match match_expr="True" start_expr="(TARGET.Requestgpus &gt;= 1)">
+            <factory query_expr='stringListMember("VIRGOGPU", GLIDEIN_Supported_VOs)&amp;&amp;GLIDEIN_Site=!="Stampede" &amp;&amp;GLIDEIN_Site=!="Comet"'>
+               <match_attrs>
+               </match_attrs>
+               <collectors>
+               </collectors>
+            </factory>
+            <job query_expr="(RequestGPUs=!=undefined)">
                <match_attrs>
                </match_attrs>
                <schedds>
@@ -401,20 +515,17 @@
    <ccbs>
    </ccbs>
    <collectors>
-      <collector DN="/DC=org/DC=opensciencegrid/O=Open Science Grid/OU=Services/CN=osg-ligo-1.t2.ucsd.edu" group="default" node="osg-ligo-1.t2.ucsd.edu:9618" secondary="False"/>
-      <collector DN="/DC=org/DC=opensciencegrid/O=Open Science Grid/OU=Services/CN=osg-ligo-1.t2.ucsd.edu" group="default" node="osg-ligo-1.t2.ucsd.edu:9620-9630" secondary="True"/>
+      <collector DN="/DC=org/DC=incommon/C=US/ST=CA/L=La Jolla/O=University of California, San Diego/OU=UCSD/CN=osg-ligo-1.t2.ucsd.edu" group="default" node="osg-ligo-1.t2.ucsd.edu:9618" secondary="False"/>
+      <collector DN="/DC=org/DC=incommon/C=US/ST=CA/L=La Jolla/O=University of California, San Diego/OU=UCSD/CN=osg-ligo-1.t2.ucsd.edu" group="default" node="osg-ligo-1.t2.ucsd.edu:9620-9630" secondary="True"/>
    </collectors>
    <files>
+     <file absfname="/opt/osg-flock/node-check/osgvo-node-validation" after_entry="True" after_group="False" const="True" executable="True" period="0" prefix="GLIDEIN_PS_" untar="False" wrapper="False">
+         <untar_options cond_attr="TRUE"/>
+      </file>
       <file absfname="/opt/osg-flock/node-check/osgvo-node-advertise" after_entry="True" after_group="False" const="True" executable="True" period="240" prefix="NOPREFIX" untar="False" wrapper="False">
          <untar_options cond_attr="TRUE"/>
       </file>
-      <file absfname="/opt/osg-flock/job-wrappers/user-job-wrapper.sh" after_entry="True" after_group="False" const="True" executable="False" period="0" prefix="NOPREFIX" untar="False" wrapper="True">
-         <untar_options cond_attr="TRUE"/>
-      </file>
-      <file absfname="/etc/osg-ligo-fe/scripts/job-wrappers/ligo-lmod-wrapper.sh" after_entry="True" after_group="False" const="True" executable="False" period="0" prefix="NOPREFIX" untar="False" wrapper="True">
-         <untar_options cond_attr="TRUE"/>
-      </file>
-      <file absfname="/etc/osg-ligo-fe/scripts/job-wrappers/osg-job-wrapper.sh" after_entry="True" after_group="False" const="True" executable="False" period="0" prefix="NOPREFIX" untar="False" wrapper="True">
+      <file absfname="/opt/osg-flock/job-wrappers/user-job-wrapper.sh" after_entry="True" after_group="True" const="True" executable="False" period="0" prefix="NOPREFIX" untar="False" wrapper="True">
          <untar_options cond_attr="TRUE"/>
       </file>
       <file absfname="/etc/osg-ligo-fe/scripts/node-check/cvmfs-check.sh" after_entry="True" after_group="True" const="True" executable="True" period="0" prefix="NOPREFIX" untar="False" wrapper="False">
@@ -423,13 +534,10 @@
       <file absfname="/etc/osg-ligo-fe/scripts/node-check/vsize-check.sh" after_entry="True" after_group="False" const="True" executable="True" period="0" prefix="NOPREFIX" untar="False" wrapper="False">
          <untar_options cond_attr="TRUE"/>
       </file>
-      <file absfname="/etc/osg-ligo-fe/scripts/node-check/ligo-cvmfs-storage-check.sh" after_entry="True" after_group="False" const="True" executable="True" period="230" prefix="NOPREFIX" untar="False" wrapper="False">
+      <file absfname="/etc/osg-ligo-fe/scripts/node-check/frame_files_small.txt" after_entry="True" after_group="False" const="True" executable="False" period="0" prefix="GLIDEIN_PS_" untar="False" wrapper="False">
          <untar_options cond_attr="TRUE"/>
       </file>
-      <file absfname="/etc/osg-ligo-fe/scripts/job-wrappers/cvmfs-enviroment.sh" after_entry="True" after_group="False" const="True" executable="False" period="0" prefix="NOPREFIX" untar="False" wrapper="True">
-         <untar_options cond_attr="TRUE"/>
-      </file>
-      <file absfname="/etc/osg-ligo-fe/scripts/node-check/gfal-check.sh" after_entry="True" after_group="True" const="True" executable="True" period="0" prefix="NOPREFIX" untar="False" wrapper="False">
+      <file absfname="/etc/osg-ligo-fe/scripts/node-check/ligo-cvmfs-storage-check.sh" after_entry="True" after_group="False" const="True" executable="True" period="0" prefix="NOPREFIX" untar="False" wrapper="False">
          <untar_options cond_attr="TRUE"/>
       </file>
    </files>
